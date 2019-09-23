@@ -1,0 +1,33 @@
+---
+# tasks file for ansible-aiwacs-agent
+
+- name: "Agent installation on RedHat family os"
+  include: "install_RedHat.yml"
+  when:
+    - ansible_distribution == 'CentOS' or ansible_distribution == "RedHat"
+  tags:
+    - aiwacs-agent
+    - init
+    - config
+    - service
+
+- name: "Agent installation on Ubuntu os"
+  include: "install_Ubuntu.yml"
+  when:
+    - ansible_distribution == 'Ubuntu'
+  tags:
+    - aiwacs-agent
+    - init
+    - config
+    - service
+
+- name: "Agent installation on Windows OS"
+  include: "install_windows.yml"
+  when:
+    - ansible_os_family == "Windows"
+  tags:
+    - aiwacs-agent
+    - init
+    - config
+    - service
+

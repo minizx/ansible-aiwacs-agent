@@ -1,0 +1,9 @@
+---
+# defaults file for ansible-aiwacs-agent
+
+aiwacs_token: 0000000000000000
+aiwacs_server_ip: 1.1.1.1
+aiwacs_server_port: 8891
+aiwacs_dir: /usr/local/aiwacs
+aiwacs_win_dir: c:\aiwacs
+aiwcas_install_mode: install

@@ -1,0 +1,34 @@
+##### AiWACS 에이전트 설치 스크립트 #####
+
+
+#!/bin/bash
+
+### AiWACS 접속 설정
+# 고객사 ID
+AIWACS_TOKEN={{ aiwacs_token }}
+## AiWACS 서버 IP, Port
+AIWACS_SERVER_IP={{ aiwacs_server_ip }}
+AIWACS_SERVER_PORT={{ aiwacs_server_port }}
+## AiWACS 설치 DIR
+AiWACS_DIR={{ aiwacs_dir }}
+
+
+### AiWACS 경로로 이동
+cd $AiWACS_DIR/
+
+  
+### AiWACS 경로 권한 설정 
+## 실행 권한 설정
+# chmod 700 $AiWACS_DIR/ -R
+ 
+ 
+### 에이전트 설치
+cd $AiWACS_DIR
+
+./install.sh <<END
+\n
+$AIWACS_TOKEN
+$AIWACS_SERVER_IP
+$AIWACS_SERVER_PORT
+END
+

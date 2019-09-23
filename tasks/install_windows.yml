@@ -1,0 +1,62 @@
+---
+
+- name: "Windows | Set default architecture"
+  set_fact:
+    windows_arch: 32
+
+- name: "Windows | Override architecture if 64-bit"
+  set_fact:
+    windows_arch: 64
+  when:
+    - ansible_architecture == "64-bit" or ansible_architecture == "64비트"
+
+- name: "Windows | Set agent file name"
+  set_fact:
+    aiwacs_win_package: windows{{ ansible_distribution_major_version }}-{{ windows_arch }}.zip
+
+- name: "Windows | Create directory structure"
+  win_file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ aiwacs_win_dir }}"
+
+- name: "Windows | Agent file copy"
+  win_copy:
+    src: "files/{{ aiwacs_win_package }}"
+    dest: "{{ aiwacs_win_dir }}/{{ aiwacs_win_package }}"
+
+- name: "Windows | Unzip file and delete"
+  win_unzip:
+    src: '{{ aiwacs_win_dir }}\{{ aiwacs_win_package }}'
+    dest: "{{ aiwacs_win_dir }}"
+    delete_archive: yes
+
+- name: "Windows | Configure aiwacs-agent"
+  win_template:
+    src: AiWACSAgent.win.ini.j2
+    dest: '{{ aiwacs_win_dir }}\AiWACSAgent.ini'
+
+- name: "Windows | Create AiWACS Agent service"
+  win_service:
+    name: AiWACSagent
+    path: '{{ aiwacs_win_dir }}\AiWACSService.exe --param1={{ aiwacs_win_dir }}\AiWACSAgent.ini'
+    display_name: AiWACSagent
+    description: AiWACS NMS Agent
+#  notify: restart win aiwacs agent
+
+- name: "Windows | Set service startup mode to auto and ensure it is started"
+  win_service:
+    name: AiWACSagent
+    start_mode: auto
+    state: restarted
+
+#- name: "Windows | Firewall rule"
+#  win_firewall_rule:
+#    name: aiwacs Agent
+#    localport: "{{ aiwacs_agent_listenport }}"
+#    action: allow
+#    direction: in
+#    protocol: tcp
+#    state: present
+#    enabled: yes

@@ -1,0 +1,9 @@
+---
+# handlers file for ansible-aiwacs-agent
+
+- name: restart aiwacs agent
+  shell: |
+    {{ aiwacs_dir }}/stop.sh
+    {{ aiwacs_dir }}/start.sh
+    exit 0
+  become: yes

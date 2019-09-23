@@ -1,0 +1,22 @@
+[Server]
+Ip   = {{ aiwacs_server_ip }}
+Port = {{ aiwacs_server_port }}
+Company = {{ aiwacs_token }}
+
+[Path]
+AgentPath  = {{ aiwacs_dir }}/AiWACSAgent
+UpdatePath = {{ aiwacs_dir }}/AiWACSAgent.update
+BackupPath = {{ aiwacs_dir }}/backup
+PidFilePath = {{ aiwacs_dir }}/AiWACSAgent.pid
+LogFilePath = {{ aiwacs_dir }}/log
+LogFileName = AiWACSAgent.log
+AgentFilename  = AiWACSAgent
+
+[Update]
+UseUpdate = 1
+
+[Log]
+Level = 3
+MaxFileSize = 10485760
+MaxFiles = 5
+

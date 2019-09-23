@@ -1,0 +1,46 @@
+---
+# Tasks specific for RedHat systems
+
+- name: Creates aiwacs agent directory
+  file:
+    path: "{{ aiwacs_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+    recurse: yes
+  become: yes
+
+- name: Unpack the tgz
+  unarchive:
+    src: "linux_centos{{ ansible_distribution_major_version }}-{{ ansible_userspace_bits }}.tgz"
+    dest: "{{ aiwacs_dir }}"
+  become: yes
+
+- name: aiwacs agent install script copy
+  template:
+    src: "install_aiwacs-ansible.sh.j2"
+    dest: "{{ aiwacs_dir }}/install_aiwacs-ansible.sh"
+    owner: root
+    group: root
+    mode: 0700
+  become: yes
+
+
+- name: aiwacs agent install and start
+  shell: "{{ aiwacs_dir }}/install_aiwacs-ansible.sh"
+  become: yes
+
+
+# install 스크립트에서 토큰값(회사)명이 0으로 저장되는 문제가 있음
+# 설정파일을 다시 배포하고 재시작하여 문제가 발생하지 않도록 조치
+- name: AiWACS Agent config copy
+  template:
+    src: AiWACSAgent.ini.j2
+    dest: "{{ aiwacs_dir }}/AiWACSAgent.ini"
+    owner: root
+    group: root
+  notify: restart aiwacs agent
+  become: yes
+
+
